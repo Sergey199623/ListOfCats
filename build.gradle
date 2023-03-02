@@ -1,0 +1,30 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    apply from: "$project.rootDir/scripts/dependencies.gradle"
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+}
+
+plugins {
+    id 'com.android.application' version '7.4.0' apply false
+    id 'com.android.library' version '7.4.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.7.21' apply false
+}
+
+allprojects {
+    apply from: "$rootDir/scripts/dependencies.gradle"
+
+    // for M1 Apple chip https://stackoverflow.com/a/68917988
+    allprojects {
+        configurations.all {
+            resolutionStrategy {
+                force 'org.xerial:sqlite-jdbc:3.34.0'
+            }
+        }
+    }
+}

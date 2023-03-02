@@ -1,0 +1,12 @@
+ext {
+
+    buildToolsAllVersion = "30.0.3"
+
+    sdkMinVersion = 24
+    sdkTargetVersion = 31
+    sdkCompileVersion = 33
+
+    roomVersion = "2.5.0"
+    glideVersion = "4.12.0"
+    retrofitVersion = "2.9.0"
+}
