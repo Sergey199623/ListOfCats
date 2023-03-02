@@ -24,14 +24,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         adapter = CatAdapter(emptyList()) { cat ->
+            cat.isFavorite = !cat.isFavorite
             if (cat.isFavorite) {
                 viewOutput.removeFromFavoritesCats(cat)
             } else {
                 viewOutput.addToFavoriteCats(cat)
             }
         }
-        binding
-            .catsRecyclerView.adapter = adapter
+        binding.catsRecyclerView.adapter = adapter
 
         lifecycleScope.launchWhenStarted {
             viewOutput.catsFlow.collect { resultCats ->

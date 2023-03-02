@@ -24,13 +24,17 @@ class CatAdapter(
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         val cat = cats[position]
         holder.bind(cat)
-        holder.favoriteButton.setOnClickListener { onFavoriteClick(cat) }
+        holder.favoriteButton.setOnClickListener {
+            onFavoriteClick(cat)
+            holder.favoriteButton(cat.isFavorite)
+        }
     }
 
     override fun getItemCount() = cats.size
 }
 
 class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
     private val imageView: ImageView = itemView.findViewById(R.id.catImageView)
     val favoriteButton: ImageButton = itemView.findViewById(R.id.favoriteButton)
 
@@ -39,6 +43,14 @@ class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(cat.url)
             .into(imageView)
         if (cat.isFavorite) {
+            favoriteButton.setImageResource(R.drawable.ic_favorite_border)
+        } else {
+            favoriteButton.setImageResource(R.drawable.ic_favorite)
+        }
+    }
+
+    fun favoriteButton(isFavorite: Boolean) {
+        if (isFavorite) {
             favoriteButton.setImageResource(R.drawable.ic_favorite_border)
         } else {
             favoriteButton.setImageResource(R.drawable.ic_favorite)
