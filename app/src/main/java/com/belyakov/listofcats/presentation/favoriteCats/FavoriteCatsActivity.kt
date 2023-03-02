@@ -31,11 +31,18 @@ class FavoriteCatsActivity : AppCompatActivity() {
         binding.favoriteCatsRecyclerView.adapter = adapter
 
         lifecycleScope.launchWhenStarted {
-            Log.d("FavoriteCatsActivityAdapter", "getFavoriteCats() called, result: ${adapter.getSize()}")
-            viewOutput.favoriteCatsFlow.collect { favoriteCats ->
-                adapter.cats = favoriteCats
-                adapter.updateList(favoriteCats)
+            viewOutput.favoriteCatsFlow.collect { resultCats ->
+                adapter.cats = resultCats
+                adapter.notifyDataSetChanged()
             }
         }
+
+//        lifecycleScope.launchWhenStarted {
+//            Log.d("FavoriteCatsActivityAdapter", "getFavoriteCats() called, result: ${adapter.getSize()}")
+//            viewOutput.favoriteCatsFlow.collect { favoriteCats ->
+//                adapter.cats = favoriteCats
+//                adapter.updateList(favoriteCats)
+//            }
+//        }
     }
 }

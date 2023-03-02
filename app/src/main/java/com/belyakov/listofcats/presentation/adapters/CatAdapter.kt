@@ -11,7 +11,7 @@ import com.belyakov.listofcats.data.database.Cat
 import com.bumptech.glide.Glide
 
 class CatAdapter(
-    var cats: List<Cat>,
+    var cats: MutableList<Cat>,
     var onFavoriteClick: (Cat) -> Unit
 ) : RecyclerView.Adapter<CatViewHolder>() {
 
@@ -26,7 +26,15 @@ class CatAdapter(
         holder.bind(cat)
         holder.favoriteButton.setOnClickListener {
             onFavoriteClick(cat)
-            holder.favoriteButton(cat.isFavorite)
+            holder.setFavoriteIcon(cat.isFavorite)
+        }
+    }
+
+    fun updateCat(cat: Cat) {
+        val index = cats.indexOfFirst { it.id == cat.id }
+        if (index != -1) {
+            cats[index] = cat
+            notifyDataSetChanged()
         }
     }
 
@@ -42,14 +50,10 @@ class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView)
             .load(cat.url)
             .into(imageView)
-        if (cat.isFavorite) {
-            favoriteButton.setImageResource(R.drawable.ic_favorite)
-        } else {
-            favoriteButton.setImageResource(R.drawable.ic_not_favorite)
-        }
+        setFavoriteIcon(cat.isFavorite)
     }
 
-    fun favoriteButton(isFavorite: Boolean) {
+    fun setFavoriteIcon(isFavorite: Boolean) {
         if (isFavorite) {
             favoriteButton.setImageResource(R.drawable.ic_favorite)
         } else {

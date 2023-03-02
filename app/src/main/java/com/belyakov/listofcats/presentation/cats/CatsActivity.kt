@@ -3,6 +3,7 @@ package com.belyakov.listofcats.presentation.cats
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.belyakov.listofcats.databinding.ActivityCatsBinding
@@ -25,14 +26,19 @@ class CatsActivity : AppCompatActivity() {
         binding = ActivityCatsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = CatAdapter(emptyList()) { cat ->
-            cat.isFavorite = !cat.isFavorite
-            if (cat.isFavorite) {
-                viewOutput.removeFromFavoritesCats(cat)
-            } else {
-                viewOutput.addToFavoriteCats(cat)
-            }
+        adapter = CatAdapter(mutableListOf()) { cat ->
+            val isFavorite = !cat.isFavorite
+            viewOutput.addToFavoriteCats(cat.copy(isFavorite = isFavorite))
+            adapter.updateCat(cat)
+            Toast.makeText(
+                this,
+                if (isFavorite) "Котик добавлен в избранное" else "Котик удален из избранного",
+                Toast.LENGTH_SHORT
+            ).show()
         }
+
+        viewOutput.getAllCats(1)
+
         with(binding) {
             favoriteCatsButton.setOnClickListener { showFavoriteScreen() }
             catsRecyclerView.adapter = adapter
@@ -40,11 +46,11 @@ class CatsActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             viewOutput.catsFlow.collect { resultCats ->
-                adapter.cats = resultCats
+                adapter.cats.clear()
+                adapter.cats.addAll(resultCats)
                 adapter.notifyDataSetChanged()
             }
         }
-        viewOutput.getAllCats(1)
     }
 
     private fun showFavoriteScreen() {

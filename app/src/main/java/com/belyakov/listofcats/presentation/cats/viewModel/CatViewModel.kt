@@ -33,15 +33,12 @@ internal class CatViewModel(
     override fun addToFavoriteCats(cat: Cat) {
         viewModelScope.launch {
             catsInteractor.addCatToFavorites(cat)
-//            catDao.update(cat)
-//            catDao.insert(cat)
         }
     }
 
     override fun removeFromFavoritesCats(cat: Cat) {
         viewModelScope.launch {
             catsInteractor.removeCatFromFavorites(cat)
-//            catDao.delete(cat)
         }
     }
 }

@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_favorite" />
+        android:src="@drawable/ic_not_favorite" />
 
 </androidx.cardview.widget.CardView>
