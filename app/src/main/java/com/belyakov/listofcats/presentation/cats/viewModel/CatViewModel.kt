@@ -1,4 +1,4 @@
-package com.belyakov.listofcats.presentation.viewModel
+package com.belyakov.listofcats.presentation.cats.viewModel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

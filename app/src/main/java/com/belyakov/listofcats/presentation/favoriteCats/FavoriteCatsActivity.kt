@@ -1,12 +1,14 @@
-package com.belyakov.listofcats
+package com.belyakov.listofcats.presentation.favoriteCats
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.belyakov.listofcats.R
 import com.belyakov.listofcats.databinding.ActivityFavoriteCatsBinding
 import com.belyakov.listofcats.presentation.adapters.FavoriteCatAdapter
-import com.belyakov.listofcats.presentation.viewModel.CatViewModel
-import com.belyakov.listofcats.presentation.viewModel.CatViewOutput
+import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewModel
+import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewOutput
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteCatsActivity : AppCompatActivity() {
@@ -14,8 +16,9 @@ class FavoriteCatsActivity : AppCompatActivity() {
     private lateinit var adapter: FavoriteCatAdapter
     private lateinit var binding: ActivityFavoriteCatsBinding
 
-    private val viewOutput: CatViewOutput by viewModel<CatViewModel>()
+    private val viewOutput: FavoriteCatViewOutput by viewModel<FavoriteCatViewModel>()
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorite_cats)
@@ -23,14 +26,14 @@ class FavoriteCatsActivity : AppCompatActivity() {
         adapter = FavoriteCatAdapter(emptyList()) { cat ->
             viewOutput.removeFromFavoritesCats(cat)
         }
+
         binding.favoriteCatsRecyclerView.adapter = adapter
 
         lifecycleScope.launchWhenStarted {
-            viewOutput.favoriteCatsFlow.collect { resultCats ->
-                adapter.cats = resultCats
+            viewOutput.favoriteCatsFlow.collect { favoriteCats ->
+                adapter.cats = favoriteCats
                 adapter.notifyDataSetChanged()
             }
         }
-
     }
 }

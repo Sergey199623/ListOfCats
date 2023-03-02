@@ -15,6 +15,8 @@ class FavoriteCatAdapter(
     private val onFavoriteClick: (Cat) -> Unit
 ) : RecyclerView.Adapter<FavoriteCatViewHolder>() {
 
+    private val catList = mutableListOf<Cat>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteCatViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_favorite_cat, parent, false)
@@ -24,7 +26,14 @@ class FavoriteCatAdapter(
     override fun onBindViewHolder(holder: FavoriteCatViewHolder, position: Int) {
         val cat = cats[position]
         holder.bind(cat)
-        holder.favoriteButton.setOnClickListener { onFavoriteClick(cat) }
+        holder.favoriteButton.setOnClickListener {
+            onFavoriteClick(cat)
+            // Добавить обработку клика на кнопку "Удалить"
+            val updatedList = cats.toMutableList()
+            updatedList.removeAt(position)
+            cats = updatedList
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount() = cats.size
@@ -38,6 +47,6 @@ class FavoriteCatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         Glide.with(itemView)
             .load(cat.url)
             .into(imageView)
-        favoriteButton.setImageResource(R.drawable.ic_favorite_border)
+        favoriteButton.setImageResource(R.drawable.ic_favorite)
     }
 }

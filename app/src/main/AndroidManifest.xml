@@ -15,7 +15,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.cats.CatsActivity"
             android:exported="true"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize">
@@ -27,7 +27,7 @@
         </activity>
 
         <activity
-            android:name=".FavoriteCatsActivity"
+            android:name=".presentation.favoriteCats.FavoriteCatsActivity"
             android:exported="true"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize" />

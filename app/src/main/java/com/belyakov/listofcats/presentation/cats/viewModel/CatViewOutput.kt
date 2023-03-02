@@ -1,4 +1,4 @@
-package com.belyakov.listofcats.presentation.viewModel
+package com.belyakov.listofcats.presentation.cats.viewModel
 
 import com.belyakov.listofcats.data.database.Cat
 import kotlinx.coroutines.flow.Flow

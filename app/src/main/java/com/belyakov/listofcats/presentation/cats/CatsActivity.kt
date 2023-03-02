@@ -1,4 +1,4 @@
-package com.belyakov.listofcats
+package com.belyakov.listofcats.presentation.cats
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.belyakov.listofcats.databinding.ActivityMainBinding
 import com.belyakov.listofcats.presentation.adapters.CatAdapter
-import com.belyakov.listofcats.presentation.viewModel.CatViewModel
-import com.belyakov.listofcats.presentation.viewModel.CatViewOutput
+import com.belyakov.listofcats.presentation.cats.viewModel.CatViewModel
+import com.belyakov.listofcats.presentation.cats.viewModel.CatViewOutput
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class CatsActivity : AppCompatActivity() {
 
     private lateinit var adapter: CatAdapter
     private lateinit var binding: ActivityMainBinding

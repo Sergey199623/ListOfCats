@@ -43,17 +43,17 @@ class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(cat.url)
             .into(imageView)
         if (cat.isFavorite) {
-            favoriteButton.setImageResource(R.drawable.ic_favorite_border)
-        } else {
             favoriteButton.setImageResource(R.drawable.ic_favorite)
+        } else {
+            favoriteButton.setImageResource(R.drawable.ic_not_favorite)
         }
     }
 
     fun favoriteButton(isFavorite: Boolean) {
         if (isFavorite) {
-            favoriteButton.setImageResource(R.drawable.ic_favorite_border)
-        } else {
             favoriteButton.setImageResource(R.drawable.ic_favorite)
+        } else {
+            favoriteButton.setImageResource(R.drawable.ic_not_favorite)
         }
     }
 }
