@@ -9,4 +9,10 @@ ext {
     roomVersion = "2.5.0"
     glideVersion = "4.12.0"
     retrofitVersion = "2.9.0"
+
+    def koinCoreVersion = "3.2.2"
+    koinDependencies = [
+            // https://github.com/InsertKoinIO/koin
+            core: "io.insert-koin:koin-android:$koinCoreVersion",
+    ]
 }
