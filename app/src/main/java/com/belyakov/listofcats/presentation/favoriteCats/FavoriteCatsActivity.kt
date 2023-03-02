@@ -2,9 +2,9 @@ package com.belyakov.listofcats.presentation.favoriteCats
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.belyakov.listofcats.R
 import com.belyakov.listofcats.databinding.ActivityFavoriteCatsBinding
 import com.belyakov.listofcats.presentation.adapters.FavoriteCatAdapter
 import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewModel
@@ -18,10 +18,11 @@ class FavoriteCatsActivity : AppCompatActivity() {
 
     private val viewOutput: FavoriteCatViewOutput by viewModel<FavoriteCatViewModel>()
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "LogNotTimber")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_favorite_cats)
+        binding = ActivityFavoriteCatsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         adapter = FavoriteCatAdapter(emptyList()) { cat ->
             viewOutput.removeFromFavoritesCats(cat)
@@ -30,9 +31,10 @@ class FavoriteCatsActivity : AppCompatActivity() {
         binding.favoriteCatsRecyclerView.adapter = adapter
 
         lifecycleScope.launchWhenStarted {
+            Log.d("FavoriteCatsActivityAdapter", "getFavoriteCats() called, result: ${adapter.getSize()}")
             viewOutput.favoriteCatsFlow.collect { favoriteCats ->
                 adapter.cats = favoriteCats
-                adapter.notifyDataSetChanged()
+                adapter.updateList(favoriteCats)
             }
         }
     }

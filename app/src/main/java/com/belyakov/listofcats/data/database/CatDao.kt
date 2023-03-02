@@ -8,7 +8,7 @@ interface CatDao {
     @Query("SELECT * FROM cats")
     fun getAllCats(): Flow<List<Cat>>
 
-    @Query("SELECT * FROM cats WHERE isFavorite = 1")
+    @Query("SELECT * FROM cats WHERE isFavorite = true")
     fun getFavoriteCats(): Flow<List<Cat>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

@@ -1,5 +1,6 @@
 package com.belyakov.listofcats.presentation.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,14 +16,15 @@ class FavoriteCatAdapter(
     private val onFavoriteClick: (Cat) -> Unit
 ) : RecyclerView.Adapter<FavoriteCatViewHolder>() {
 
-    private val catList = mutableListOf<Cat>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteCatViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_favorite_cat, parent, false)
         return FavoriteCatViewHolder(view)
     }
 
+    fun getSize() = itemCount
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: FavoriteCatViewHolder, position: Int) {
         val cat = cats[position]
         holder.bind(cat)
@@ -34,6 +36,12 @@ class FavoriteCatAdapter(
             cats = updatedList
             notifyDataSetChanged()
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateList(newCatList: List<Cat>) {
+        cats = newCatList
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = cats.size
