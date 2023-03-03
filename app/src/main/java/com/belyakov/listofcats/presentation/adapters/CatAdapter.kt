@@ -26,7 +26,9 @@ class CatAdapter(
         holder.bind(cat)
         holder.favoriteButton.setOnClickListener {
             onFavoriteClick(cat)
-            holder.setFavoriteIcon(cat.isFavorite)
+            val newCat = cat.copy(isFavorite = !cat.isFavorite)
+            cats[position] = newCat
+            holder.setFavoriteIcon(newCat.isFavorite)
         }
     }
 

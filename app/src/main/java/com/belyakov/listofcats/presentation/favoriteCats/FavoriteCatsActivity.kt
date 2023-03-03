@@ -36,13 +36,5 @@ class FavoriteCatsActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         }
-
-//        lifecycleScope.launchWhenStarted {
-//            Log.d("FavoriteCatsActivityAdapter", "getFavoriteCats() called, result: ${adapter.getSize()}")
-//            viewOutput.favoriteCatsFlow.collect { favoriteCats ->
-//                adapter.cats = favoriteCats
-//                adapter.updateList(favoriteCats)
-//            }
-//        }
     }
 }

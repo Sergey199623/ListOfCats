@@ -5,13 +5,14 @@
     android:layout_margin="8dp">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/catImageView"
+        android:id="@+id/catImageViewFavoriteCats"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/removeButton"
+        android:padding="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"

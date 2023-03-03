@@ -37,6 +37,7 @@ class CatsActivity : AppCompatActivity() {
             ).show()
         }
 
+        // if (база не пуста) { viewOutput.getAllCats(1) } переделать
         viewOutput.getAllCats(1)
 
         with(binding) {
@@ -51,6 +52,10 @@ class CatsActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
     private fun showFavoriteScreen() {

@@ -22,13 +22,11 @@ class FavoriteCatAdapter(
         return FavoriteCatViewHolder(view)
     }
 
-    fun getSize() = itemCount
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: FavoriteCatViewHolder, position: Int) {
         val cat = cats[position]
         holder.bind(cat)
-        holder.favoriteButton.setOnClickListener {
+        holder.removeButton.setOnClickListener {
             onFavoriteClick(cat)
             // Добавить обработку клика на кнопку "Удалить"
             val updatedList = cats.toMutableList()
@@ -38,23 +36,17 @@ class FavoriteCatAdapter(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateList(newCatList: List<Cat>) {
-        cats = newCatList
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount() = cats.size
 }
 
 class FavoriteCatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val imageView: ImageView = itemView.findViewById(R.id.catImageView)
-    val favoriteButton: ImageButton = itemView.findViewById(R.id.favoriteButton)
+    private val imageView: ImageView = itemView.findViewById(R.id.catImageViewFavoriteCats)
+    val removeButton: ImageButton = itemView.findViewById(R.id.removeButton)
 
     fun bind(cat: Cat) {
         Glide.with(itemView)
             .load(cat.url)
             .into(imageView)
-        favoriteButton.setImageResource(R.drawable.ic_favorite)
+        removeButton.setImageResource(R.drawable.ic_delete)
     }
 }

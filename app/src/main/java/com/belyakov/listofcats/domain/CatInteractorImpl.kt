@@ -23,8 +23,6 @@ class CatInteractorImpl(
         .build()
         .create(CatApi::class.java)
 
-    override suspend fun getCats(limit: Int, page: Int) = catApi.getCats(limit, page)
-
     override suspend fun getCatList(page: Int, limit: Int): List<Cat> {
         // Получаем список котов с сервера и сохраняем в базу данных
         val catList = catApi.getCats(limit, page)
@@ -39,13 +37,13 @@ class CatInteractorImpl(
 
     override suspend fun addCatToFavorites(cat: Cat) {
         // Добавляем кота в список избранных в базе данных
-        cat.isFavorite = true
-        catsDao.update(cat)
+        val newCat = cat.copy(isFavorite = true)
+        catsDao.update(newCat)
     }
 
     override suspend fun removeCatFromFavorites(cat: Cat) {
         // Удаляем кота из списка избранных в базе данных
-        cat.isFavorite = false
-        catsDao.update(cat)
+        val newCat = cat.copy(isFavorite = false)
+        catsDao.update(newCat)
     }
 }

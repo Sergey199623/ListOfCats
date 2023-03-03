@@ -15,13 +15,10 @@ class App : MultiDexApplication(), KoinComponent {
     }
 
     companion object {
-        private var isDIStarted = false
 
         @Synchronized
         fun startDIifNeed(context: Context) {
-            if (isDIStarted) {
-                return
-            }
+
             startKoin {
                 androidContext(context)
                 modules( CatsModule.create() )

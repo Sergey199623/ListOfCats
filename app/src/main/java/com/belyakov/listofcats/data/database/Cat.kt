@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class Cat(
     @PrimaryKey val id: String,
     val url: String,
-    var isFavorite: Boolean = false
+    val isFavorite: Boolean = false
 )
