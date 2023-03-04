@@ -12,7 +12,7 @@ import com.belyakov.listofcats.data.database.Cat
 import com.bumptech.glide.Glide
 
 class FavoriteCatAdapter(
-    var cats: List<Cat>,
+    private var cats: MutableList<Cat>,
     private val onFavoriteClick: (Cat) -> Unit,
     private val onDownloadClick: (Cat) -> Unit,
 ) : RecyclerView.Adapter<FavoriteCatViewHolder>() {
@@ -27,6 +27,7 @@ class FavoriteCatAdapter(
     override fun onBindViewHolder(holder: FavoriteCatViewHolder, position: Int) {
         val cat = cats[position]
         holder.bind(cat)
+
         holder.removeButton.setOnClickListener {
             onFavoriteClick(cat)
             // Добавить обработку клика на кнопку "Удалить"
@@ -37,8 +38,12 @@ class FavoriteCatAdapter(
         }
         holder.downloadButton.setOnClickListener {
             onDownloadClick(cat)
-
         }
+    }
+
+    fun setItems(items: List<Cat>) {
+        cats = items.toMutableList()
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = cats.size
@@ -53,6 +58,7 @@ class FavoriteCatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         Glide.with(itemView)
             .load(cat.url)
             .into(imageView)
+
         removeButton.setImageResource(R.drawable.ic_delete)
     }
 }

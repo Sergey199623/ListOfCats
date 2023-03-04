@@ -25,7 +25,7 @@ class FavoriteCatsActivity : AppCompatActivity() {
         binding = ActivityFavoriteCatsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = FavoriteCatAdapter(emptyList(),
+        adapter = FavoriteCatAdapter(mutableListOf(),
             { cat -> viewOutput.onRemoveFromFavoriteCats(cat) },
             { cat -> viewOutput.onDownloadFavoriteCat(cat.url) }
         )
@@ -34,8 +34,7 @@ class FavoriteCatsActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             viewOutput.favoriteCatsFlow.collect { resultCats ->
-                adapter.cats = resultCats
-                adapter.notifyDataSetChanged()
+                adapter.setItems(resultCats)
             }
         }
 

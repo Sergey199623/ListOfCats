@@ -5,15 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.belyakov.listofcats.R
 import com.belyakov.listofcats.data.database.Cat
 import com.bumptech.glide.Glide
 
 class CatAdapter(
-    var cats: MutableList<Cat>,
-    var onFavoriteClick: (Cat) -> Unit
-) : RecyclerView.Adapter<CatViewHolder>() {
+    private val cats: MutableList<Cat>,
+    private val onFavoriteClick: (Cat) -> Unit
+) : PagingDataAdapter<Cat, CatAdapter.CatViewHolder>(DIFF_CALLBACK) {
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Cat>() {
+            override fun areItemsTheSame(oldItem: Cat, newItem: Cat): Boolean =
+                oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: Cat, newItem: Cat): Boolean =
+                oldItem == newItem
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -22,13 +34,12 @@ class CatAdapter(
     }
 
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
-        val cat = cats[position]
+        val cat = getItem(position)
         holder.bind(cat)
         holder.favoriteButton.setOnClickListener {
-            onFavoriteClick(cat)
-            val newCat = cat.copy(isFavorite = !cat.isFavorite)
-            cats[position] = newCat
-            holder.setFavoriteIcon(newCat.isFavorite)
+            if (cat != null) {
+                onFavoriteClick(cat)
+            }
         }
     }
 
@@ -40,26 +51,26 @@ class CatAdapter(
         }
     }
 
-    override fun getItemCount() = cats.size
-}
+    class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val imageView: ImageView = itemView.findViewById(R.id.catImageView)
+        val favoriteButton: ImageButton = itemView.findViewById(R.id.favoriteButton)
 
-    private val imageView: ImageView = itemView.findViewById(R.id.catImageView)
-    val favoriteButton: ImageButton = itemView.findViewById(R.id.favoriteButton)
+        fun bind(cat: Cat?) {
+            if (cat != null) {
+                Glide.with(itemView)
+                    .load(cat.url)
+                    .into(imageView)
+                setFavoriteIcon(cat.isFavorite)
+            }
+        }
 
-    fun bind(cat: Cat) {
-        Glide.with(itemView)
-            .load(cat.url)
-            .into(imageView)
-        setFavoriteIcon(cat.isFavorite)
-    }
-
-    fun setFavoriteIcon(isFavorite: Boolean) {
-        if (isFavorite) {
-            favoriteButton.setImageResource(R.drawable.ic_favorite)
-        } else {
-            favoriteButton.setImageResource(R.drawable.ic_not_favorite)
+        private fun setFavoriteIcon(isFavorite: Boolean) {
+            if (isFavorite) {
+                favoriteButton.setImageResource(R.drawable.ic_favorite)
+            } else {
+                favoriteButton.setImageResource(R.drawable.ic_not_favorite)
+            }
         }
     }
 }

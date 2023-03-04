@@ -38,18 +38,13 @@ class CatsActivity : AppCompatActivity() {
         }
 
         with(binding) {
-            favoriteCatsButton.setOnClickListener { showFavoriteScreen() }
+            favoriteCatsFab.setOnClickListener { showFavoriteScreen() }
             catsRecyclerView.adapter = adapter
         }
 
-        // if (база не пуста) { viewOutput.getAllCats(1) } переделать
-        viewOutput.onViewCreated(1)
-
         lifecycleScope.launchWhenStarted {
-            viewOutput.catsFlow.collect { resultCats ->
-                adapter.cats.clear()
-                adapter.cats.addAll(resultCats)
-                adapter.notifyDataSetChanged()
+            viewOutput.catsPagingFlow.collect { data ->
+                adapter.submitData(data)
             }
         }
     }
