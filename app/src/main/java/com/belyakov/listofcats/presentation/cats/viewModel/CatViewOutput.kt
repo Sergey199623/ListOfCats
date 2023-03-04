@@ -8,9 +8,9 @@ interface CatViewOutput {
     val catsFlow: Flow<List<Cat>>
     val favoriteCatsFlow: Flow<List<Cat>>
 
-    fun getAllCats(page: Int)
+    fun onViewCreated(page: Int)
 
-    fun addToFavoriteCats(cat: Cat)
+    fun onAddToFavoriteCats(cat: Cat)
 
-    fun removeFromFavoritesCats(cat: Cat)
+    fun onRemoveFromFavoritesCats(cat: Cat)
 }

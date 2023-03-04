@@ -28,7 +28,7 @@ class CatsActivity : AppCompatActivity() {
 
         adapter = CatAdapter(mutableListOf()) { cat ->
             val isFavorite = !cat.isFavorite
-            viewOutput.addToFavoriteCats(cat.copy(isFavorite = isFavorite))
+            viewOutput.onAddToFavoriteCats(cat.copy(isFavorite = isFavorite))
             adapter.updateCat(cat)
             Toast.makeText(
                 this,
@@ -37,13 +37,13 @@ class CatsActivity : AppCompatActivity() {
             ).show()
         }
 
-        // if (база не пуста) { viewOutput.getAllCats(1) } переделать
-        viewOutput.getAllCats(1)
-
         with(binding) {
             favoriteCatsButton.setOnClickListener { showFavoriteScreen() }
             catsRecyclerView.adapter = adapter
         }
+
+        // if (база не пуста) { viewOutput.getAllCats(1) } переделать
+        viewOutput.onViewCreated(1)
 
         lifecycleScope.launchWhenStarted {
             viewOutput.catsFlow.collect { resultCats ->

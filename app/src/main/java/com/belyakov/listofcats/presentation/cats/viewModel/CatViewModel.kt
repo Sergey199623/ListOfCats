@@ -16,7 +16,7 @@ internal class CatViewModel(
     override val catsFlow = MutableStateFlow<List<Cat>>(emptyList())
     override val favoriteCatsFlow = MutableStateFlow<List<Cat>>(emptyList())
 
-    override fun getAllCats(page: Int) {
+    override fun onViewCreated(page: Int) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable -> Timber.e(throwable) }
         viewModelScope.launch(exceptionHandler) {
             val newCats = catsInteractor.getCatList(page, 10)
@@ -24,13 +24,13 @@ internal class CatViewModel(
         }
     }
 
-    override fun addToFavoriteCats(cat: Cat) {
+    override fun onAddToFavoriteCats(cat: Cat) {
         viewModelScope.launch {
             catsInteractor.addCatToFavorites(cat)
         }
     }
 
-    override fun removeFromFavoritesCats(cat: Cat) {
+    override fun onRemoveFromFavoritesCats(cat: Cat) {
         viewModelScope.launch {
             catsInteractor.removeCatFromFavorites(cat)
         }
