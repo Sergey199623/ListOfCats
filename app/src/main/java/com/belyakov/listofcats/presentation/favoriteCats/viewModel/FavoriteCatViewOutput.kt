@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface FavoriteCatViewOutput {
 
     val favoriteCatsFlow: Flow<List<Cat>>
+    val downloadCatsFlow: Flow<Boolean>
 
-    fun removeFromFavoritesCats(cat: Cat)
+    fun onRemoveFromFavoriteCats(cat: Cat)
+
+    fun onDownloadFavoriteCat(url: String)
 }

@@ -13,7 +13,8 @@ import com.bumptech.glide.Glide
 
 class FavoriteCatAdapter(
     var cats: List<Cat>,
-    private val onFavoriteClick: (Cat) -> Unit
+    private val onFavoriteClick: (Cat) -> Unit,
+    private val onDownloadClick: (Cat) -> Unit,
 ) : RecyclerView.Adapter<FavoriteCatViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteCatViewHolder {
@@ -34,6 +35,10 @@ class FavoriteCatAdapter(
             cats = updatedList
             notifyDataSetChanged()
         }
+        holder.downloadButton.setOnClickListener {
+            onDownloadClick(cat)
+
+        }
     }
 
     override fun getItemCount() = cats.size
@@ -42,6 +47,7 @@ class FavoriteCatAdapter(
 class FavoriteCatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val imageView: ImageView = itemView.findViewById(R.id.catImageViewFavoriteCats)
     val removeButton: ImageButton = itemView.findViewById(R.id.removeButton)
+    val downloadButton: ImageButton = itemView.findViewById(R.id.downloadButton)
 
     fun bind(cat: Cat) {
         Glide.with(itemView)

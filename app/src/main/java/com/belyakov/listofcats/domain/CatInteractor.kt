@@ -12,4 +12,6 @@ interface CatInteractor {
     suspend fun addCatToFavorites(cat: Cat)
 
     suspend fun removeCatFromFavorites(cat: Cat)
+
+    suspend fun downloadImage(url: String): Boolean
 }

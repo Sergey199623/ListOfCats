@@ -2,13 +2,14 @@ package com.belyakov.listofcats.presentation.favoriteCats
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.belyakov.listofcats.databinding.ActivityFavoriteCatsBinding
 import com.belyakov.listofcats.presentation.adapters.FavoriteCatAdapter
 import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewModel
 import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewOutput
+import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteCatsActivity : AppCompatActivity() {
@@ -24,9 +25,10 @@ class FavoriteCatsActivity : AppCompatActivity() {
         binding = ActivityFavoriteCatsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = FavoriteCatAdapter(emptyList()) { cat ->
-            viewOutput.removeFromFavoritesCats(cat)
-        }
+        adapter = FavoriteCatAdapter(emptyList(),
+            { cat -> viewOutput.onRemoveFromFavoriteCats(cat) },
+            { cat -> viewOutput.onDownloadFavoriteCat(cat.url) }
+        )
 
         binding.favoriteCatsRecyclerView.adapter = adapter
 
@@ -34,6 +36,18 @@ class FavoriteCatsActivity : AppCompatActivity() {
             viewOutput.favoriteCatsFlow.collect { resultCats ->
                 adapter.cats = resultCats
                 adapter.notifyDataSetChanged()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewOutput.downloadCatsFlow.collect { resultDownload ->
+                if (resultDownload) {
+                    Toast.makeText(
+                        this@FavoriteCatsActivity,
+                        "Изображение котика успешно загружено",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

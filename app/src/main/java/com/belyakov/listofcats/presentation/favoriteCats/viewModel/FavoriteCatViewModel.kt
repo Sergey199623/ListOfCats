@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.domain.CatInteractor
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 internal class FavoriteCatViewModel(
@@ -14,9 +15,17 @@ internal class FavoriteCatViewModel(
     override val favoriteCatsFlow: Flow<List<Cat>>
         get() = catsInteractor.getFavoriteCats()
 
-    override fun removeFromFavoritesCats(cat: Cat) {
+    override val downloadCatsFlow = MutableStateFlow(false)
+
+    override fun onRemoveFromFavoriteCats(cat: Cat) {
         viewModelScope.launch {
             catsInteractor.removeCatFromFavorites(cat)
+        }
+    }
+
+    override fun onDownloadFavoriteCat(url: String) {
+        viewModelScope.launch {
+            downloadCatsFlow.value = catsInteractor.downloadImage(url)
         }
     }
 }

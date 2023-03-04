@@ -54,10 +54,6 @@ class CatsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
     private fun showFavoriteScreen() {
         val intent = Intent(this, FavoriteCatsActivity::class.java)
         startActivity(intent)

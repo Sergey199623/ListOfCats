@@ -1,14 +1,21 @@
 package com.belyakov.listofcats.domain
 
 import android.app.Application
+import android.os.Environment
 import android.util.Log
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.data.database.CatDao
 import com.belyakov.listofcats.data.database.CatDatabase
 import com.belyakov.listofcats.data.network.CatApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
+import java.io.FileOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class CatInteractorImpl(
     applicationContext: Application
@@ -30,10 +37,7 @@ class CatInteractorImpl(
         return catList
     }
 
-    override fun getFavoriteCats(): Flow<List<Cat>>  {
-        Log.d("FavoriteCatsActivityInteractor", "getFavoriteCats() called, result: ${catsDao.getFavoriteCats()}")
-        return catsDao.getFavoriteCats()
-    }
+    override fun getFavoriteCats(): Flow<List<Cat>> = catsDao.getFavoriteCats()
 
     override suspend fun addCatToFavorites(cat: Cat) {
         // Добавляем кота в список избранных в базе данных
@@ -45,5 +49,35 @@ class CatInteractorImpl(
         // Удаляем кота из списка избранных в базе данных
         val newCat = cat.copy(isFavorite = false)
         catsDao.update(newCat)
+    }
+
+    override suspend fun downloadImage(url: String) = withContext(Dispatchers.IO) {
+        try {
+            val imageUrl = URL(url)
+            val connection = imageUrl.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+            val input = connection.inputStream
+
+            val filename = "cat_${System.currentTimeMillis()}.jpg"
+            val directory =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val file = File(directory, filename)
+            val output = FileOutputStream(file)
+
+            val buffer = ByteArray(1024)
+            var bytesRead = input.read(buffer)
+            while (bytesRead != -1) {
+                output.write(buffer, 0, bytesRead)
+                bytesRead = input.read(buffer)
+            }
+
+            output.close()
+            input.close()
+
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 }
