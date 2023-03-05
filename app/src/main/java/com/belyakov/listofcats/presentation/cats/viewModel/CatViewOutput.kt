@@ -10,7 +10,5 @@ interface CatViewOutput {
     val favoriteCatsFlow: Flow<List<Cat>>
     val catsPagingFlow: Flow<PagingData<Cat>>
 
-    fun onAddToFavoriteCats(cat: Cat)
-
-    fun onRemoveFromFavoritesCats(cat: Cat)
+    fun onChangeFavoriteStatusCat(cat: Cat)
 }
