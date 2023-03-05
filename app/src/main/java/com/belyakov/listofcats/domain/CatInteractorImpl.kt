@@ -2,7 +2,9 @@ package com.belyakov.listofcats.domain
 
 import android.app.Application
 import android.os.Environment
+import android.util.Log
 import com.belyakov.listofcats.data.database.Cat
+import com.belyakov.listofcats.data.database.CatDao
 import com.belyakov.listofcats.data.database.CatDatabase
 import com.belyakov.listofcats.data.network.CatApi
 import kotlinx.coroutines.Dispatchers
@@ -37,15 +39,10 @@ class CatInteractorImpl(
 
     override fun getFavoriteCats(): Flow<List<Cat>> = catsDao.getFavoriteCats()
 
-    override suspend fun changeFavoriteStatusCat(cat: Cat) {
+    override suspend fun addCatToFavorites(cat: Cat) {
         // Добавляем кота в список избранных в базе данных
-        if (cat.isFavorite) {
-            val newCat = cat.copy(isFavorite = true)
-            catsDao.update(newCat)
-        } else {
-            val newCat = cat.copy(isFavorite = false)
-            catsDao.update(newCat)
-        }
+        val newCat = cat.copy(isFavorite = true)
+        catsDao.update(newCat)
     }
 
     override suspend fun removeCatFromFavorites(cat: Cat) {

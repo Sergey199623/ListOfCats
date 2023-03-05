@@ -24,9 +24,15 @@ internal class CatViewModel(
         }
     }
 
-    override fun onChangeStatusFavoriteCate(cat: Cat) {
+    override fun onAddToFavoriteCats(cat: Cat) {
         viewModelScope.launch {
-            catsInteractor.changeFavoriteStatusCat(cat)
+            catsInteractor.addCatToFavorites(cat)
+        }
+    }
+
+    override fun onRemoveFromFavoritesCats(cat: Cat) {
+        viewModelScope.launch {
+            catsInteractor.removeCatFromFavorites(cat)
         }
     }
 }
