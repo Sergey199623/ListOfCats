@@ -28,9 +28,9 @@ class CatInteractorImpl(
         .build()
         .create(CatApi::class.java)
 
-    override suspend fun getCatListWithPagination(page: Int, limit: Int): List<Cat> {
-        val offset = (page - 1) * limit
-        val catList = catApi.getCats(limit, offset)
+    override suspend fun getCatList(page: Int, limit: Int): List<Cat> {
+        // Получаем список котов с сервера и сохраняем в базу данных
+        val catList = catApi.getCats(limit, page)
         catsDao.insertAll(catList)
         return catList
     }

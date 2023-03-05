@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CatInteractor {
 
-    suspend fun getCatListWithPagination(page: Int, limit: Int): List<Cat>
+    suspend fun getCatList(page: Int, limit: Int): List<Cat>
 
     fun getFavoriteCats(): Flow<List<Cat>>
 

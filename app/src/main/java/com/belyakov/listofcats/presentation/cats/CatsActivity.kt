@@ -37,6 +37,9 @@ class CatsActivity : AppCompatActivity() {
             ).show()
         }
 
+        // if (база не пуста) { viewOutput.getAllCats(1) } переделать
+        viewOutput.onViewCreated(1)
+
         with(binding) {
             favoriteCatsFab.setOnClickListener { showFavoriteScreen() }
             catsRecyclerView.adapter = adapter
