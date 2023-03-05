@@ -10,7 +10,5 @@ interface CatViewOutput {
 
     fun onViewCreated(page: Int)
 
-    fun onAddToFavoriteCats(cat: Cat)
-
-    fun onRemoveFromFavoritesCats(cat: Cat)
+    fun onChangeStatusFavoriteCate(cat: Cat)
 }

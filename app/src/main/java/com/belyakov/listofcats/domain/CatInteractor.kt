@@ -9,7 +9,7 @@ interface CatInteractor {
 
     fun getFavoriteCats(): Flow<List<Cat>>
 
-    suspend fun addCatToFavorites(cat: Cat)
+    suspend fun changeFavoriteStatusCat(cat: Cat)
 
     suspend fun removeCatFromFavorites(cat: Cat)
 
