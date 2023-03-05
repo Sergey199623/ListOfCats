@@ -11,8 +11,8 @@ import com.belyakov.listofcats.data.database.Cat
 import com.bumptech.glide.Glide
 
 class CatAdapter(
-    var cats: MutableList<Cat>,
-    var onFavoriteClick: (Cat) -> Unit
+    private var cats: MutableList<Cat>,
+    private val onFavoriteClick: (Cat) -> Unit
 ) : RecyclerView.Adapter<CatViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
@@ -30,6 +30,12 @@ class CatAdapter(
             cats[position] = newCat
             holder.setFavoriteIcon(newCat.isFavorite)
         }
+    }
+
+    fun setItems(items: List<Cat>) {
+        cats.clear()
+        cats.addAll(items)
+        notifyDataSetChanged()
     }
 
     fun updateCat(cat: Cat) {

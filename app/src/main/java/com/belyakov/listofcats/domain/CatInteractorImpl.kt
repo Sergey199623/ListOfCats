@@ -39,10 +39,14 @@ class CatInteractorImpl(
 
     override fun getFavoriteCats(): Flow<List<Cat>> = catsDao.getFavoriteCats()
 
-    override suspend fun addCatToFavorites(cat: Cat) {
-        // Добавляем кота в список избранных в базе данных
-        val newCat = cat.copy(isFavorite = true)
-        catsDao.update(newCat)
+    override suspend fun changeFavoriteStatusCate(cat: Cat) {
+        if (cat.isFavorite) {
+            val newCat = cat.copy(isFavorite = true)
+            catsDao.update(newCat)
+        } else {
+            val newCat = cat.copy(isFavorite = false)
+            catsDao.update(newCat)
+        }
     }
 
     override suspend fun removeCatFromFavorites(cat: Cat) {
