@@ -5,15 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.belyakov.listofcats.R
 import com.belyakov.listofcats.data.database.Cat
 import com.bumptech.glide.Glide
 
 class CatAdapter(
-    private var cats: MutableList<Cat>,
     private val onFavoriteClick: (Cat) -> Unit
 ) : RecyclerView.Adapter<CatViewHolder>() {
+
+    private var cats: MutableList<Cat> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -32,17 +34,19 @@ class CatAdapter(
         }
     }
 
-    fun setItems(items: List<Cat>) {
-        cats.clear()
-        cats.addAll(items)
-        notifyDataSetChanged()
+    fun setItems(items: MutableList<Cat>) {
+        if (items.isNotEmpty()) {
+            val diffResult = DiffUtil.calculateDiff(CatsDiffCallback(this.cats, items))
+            this.cats = items
+            diffResult.dispatchUpdatesTo(this)
+        }
     }
 
     fun updateCat(cat: Cat) {
         val index = cats.indexOfFirst { it.id == cat.id }
         if (index != -1) {
             cats[index] = cat
-            notifyDataSetChanged()
+            notifyItemChanged(index)
         }
     }
 

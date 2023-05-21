@@ -26,7 +26,7 @@ class CatsActivity : AppCompatActivity() {
         binding = ActivityCatsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = CatAdapter(mutableListOf()) { cat ->
+        adapter = CatAdapter { cat ->
             val isFavorite = !cat.isFavorite
             viewOutput.onChangeFavoriteStatusCat(cat.copy(isFavorite = isFavorite))
             adapter.updateCat(cat)
@@ -47,7 +47,7 @@ class CatsActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             viewOutput.catsFlow.collect { resultCats ->
-                adapter.setItems(resultCats)
+                adapter.setItems(resultCats.toMutableList())
             }
         }
     }

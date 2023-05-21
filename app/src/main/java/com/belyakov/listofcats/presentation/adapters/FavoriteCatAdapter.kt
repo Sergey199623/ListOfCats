@@ -6,16 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.belyakov.listofcats.R
 import com.belyakov.listofcats.data.database.Cat
 import com.bumptech.glide.Glide
 
 class FavoriteCatAdapter(
-    private var cats: MutableList<Cat>,
     private val onFavoriteClick: (Cat) -> Unit,
     private val onDownloadClick: (Cat) -> Unit,
 ) : RecyclerView.Adapter<FavoriteCatViewHolder>() {
+
+    private var cats: MutableList<Cat> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteCatViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -41,9 +43,10 @@ class FavoriteCatAdapter(
         }
     }
 
-    fun setItems(items: List<Cat>) {
-        cats = items.toMutableList()
-        notifyDataSetChanged()
+    fun setItems(items: MutableList<Cat>) {
+        val diffResult = DiffUtil.calculateDiff(FavoriteCatsDiffCallback(this.cats, cats))
+        this.cats = items
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount() = cats.size

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.domain.CatInteractor
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -13,14 +14,14 @@ internal class CatViewModel(
     private val catsInteractor: CatInteractor
 ) : ViewModel(), CatViewOutput {
 
-    override val catsFlow = MutableStateFlow<List<Cat>>(emptyList())
+    override val catsFlow = MutableSharedFlow<List<Cat>>()
     override val favoriteCatsFlow = MutableStateFlow<List<Cat>>(emptyList())
 
     override fun onViewCreated(page: Int) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable -> Timber.e(throwable) }
         viewModelScope.launch(exceptionHandler) {
             val newCats = catsInteractor.getCatList(page, 10)
-            catsFlow.value = newCats
+            catsFlow.emit(newCats)
         }
     }
 

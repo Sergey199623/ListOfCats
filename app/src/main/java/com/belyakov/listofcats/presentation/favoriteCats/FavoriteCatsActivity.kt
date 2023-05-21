@@ -9,7 +9,6 @@ import com.belyakov.listofcats.databinding.ActivityFavoriteCatsBinding
 import com.belyakov.listofcats.presentation.adapters.FavoriteCatAdapter
 import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewModel
 import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewOutput
-import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteCatsActivity : AppCompatActivity() {
@@ -25,7 +24,7 @@ class FavoriteCatsActivity : AppCompatActivity() {
         binding = ActivityFavoriteCatsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = FavoriteCatAdapter(mutableListOf(),
+        adapter = FavoriteCatAdapter(
             { cat -> viewOutput.onRemoveFromFavoriteCats(cat) },
             { cat -> viewOutput.onDownloadFavoriteCat(cat.url) }
         )
@@ -34,7 +33,7 @@ class FavoriteCatsActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             viewOutput.favoriteCatsFlow.collect { resultCats ->
-                adapter.setItems(resultCats)
+                adapter.setItems(resultCats.toMutableList())
             }
         }
 
