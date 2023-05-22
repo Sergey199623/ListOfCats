@@ -2,13 +2,18 @@ package com.belyakov.listofcats
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import com.belyakov.listofcats.databinding.ActivityHeadBinding
+import com.belyakov.listofcats.navigation.Navigator
 import java.util.UUID
 
 class HeadActivity : AppCompatActivity(), Navigator {
+
+    private val navigator by viewModels<MainNavigator> { ViewModelProvider.AndroidViewModelFactory(application) }
 
     private lateinit var binding: ActivityHeadBinding
 

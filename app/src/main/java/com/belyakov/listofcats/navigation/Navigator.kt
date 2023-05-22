@@ -1,4 +1,4 @@
-package com.belyakov.listofcats
+package com.belyakov.listofcats.navigation
 
 import androidx.fragment.app.Fragment
 
