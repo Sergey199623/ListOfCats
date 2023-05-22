@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.belyakov.listofcats.DownloadService
 import com.belyakov.listofcats.databinding.ActivityFavoriteCatsBinding
 import com.belyakov.listofcats.presentation.adapters.FavoriteCatAdapter
 import com.belyakov.listofcats.presentation.cats.CatsActivity
@@ -30,7 +32,15 @@ class FavoriteCatsActivity : AppCompatActivity() {
 
         adapter = FavoriteCatAdapter(
             { cat -> viewOutput.onRemoveFromFavoriteCats(cat) },
-            { cat -> viewOutput.onDownloadFavoriteCat(cat.url) }
+            { cat ->
+                run {
+                    viewOutput.onDownloadFavoriteCat(cat.url)
+                    val serviceIntent = Intent(this, DownloadService::class.java).apply {
+                        putExtra("url", cat.url)
+                    }
+                    ContextCompat.startForegroundService(this, serviceIntent)
+                }
+            }
         )
 
         binding.favoriteCatsRecyclerView.adapter = adapter

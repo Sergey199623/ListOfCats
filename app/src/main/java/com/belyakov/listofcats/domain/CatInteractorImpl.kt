@@ -18,7 +18,7 @@ import java.net.URL
 
 class CatInteractorImpl(
     applicationContext: Application
-) : CatInteractor {
+) : CatInteractor, DownloadProgressCallback {
 
     private val catDatabase = CatDatabase.getDatabase(applicationContext)
     private val catsDao = catDatabase.catDao()
@@ -64,12 +64,29 @@ class CatInteractorImpl(
             val file = File(directory, filename)
             val output = FileOutputStream(file)
 
+            val fileLength = connection.contentLength
+            var totalBytesRead = 0
+
             val buffer = ByteArray(1024)
             var bytesRead = input.read(buffer)
             while (bytesRead != -1) {
                 output.write(buffer, 0, bytesRead)
+                totalBytesRead += bytesRead
+
+                // Рассчитайте прогресс загрузки в процентах
+                val progress = (totalBytesRead * 100 / fileLength).toInt()
+
+                // Обновите LiveData с прогрессом загрузки
+                onProgressUpdated(progress)
                 bytesRead = input.read(buffer)
             }
+
+//            val buffer = ByteArray(1024)
+//            var bytesRead = input.read(buffer)
+//            while (bytesRead != -1) {
+//                output.write(buffer, 0, bytesRead)
+//                bytesRead = input.read(buffer)
+//            }
 
             output.close()
             input.close()
@@ -82,5 +99,8 @@ class CatInteractorImpl(
 
     private companion object {
         const val BASE_URL = "https://api.thecatapi.com/v1/"
+    }
+
+    override fun onProgressUpdated(progress: Int) {
     }
 }
