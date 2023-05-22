@@ -1,14 +1,18 @@
 package com.belyakov.listofcats.presentation.favoriteCats
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.belyakov.listofcats.databinding.ActivityFavoriteCatsBinding
 import com.belyakov.listofcats.presentation.adapters.FavoriteCatAdapter
+import com.belyakov.listofcats.presentation.cats.CatsActivity
 import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewModel
 import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewOutput
+import kotlinx.android.synthetic.main.part_result.view.baseLayoutProgressBar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteCatsActivity : AppCompatActivity() {
@@ -38,6 +42,12 @@ class FavoriteCatsActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launchWhenStarted {
+            viewOutput.progressBarFlow.collect { isVisible ->
+                binding.root.baseLayoutProgressBar.isVisible = isVisible
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
             viewOutput.downloadCatsFlow.collect { resultDownload ->
                 if (resultDownload) {
                     Toast.makeText(
@@ -48,5 +58,13 @@ class FavoriteCatsActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, CatsActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

@@ -16,6 +16,7 @@ internal class FavoriteCatViewModel(
         get() = catsInteractor.getFavoriteCats()
 
     override val downloadCatsFlow = MutableStateFlow(false)
+    override val progressBarFlow = MutableStateFlow(false)
 
     override fun onRemoveFromFavoriteCats(cat: Cat) {
         viewModelScope.launch {
@@ -25,7 +26,9 @@ internal class FavoriteCatViewModel(
 
     override fun onDownloadFavoriteCat(url: String) {
         viewModelScope.launch {
+            progressBarFlow.value = true
             downloadCatsFlow.value = catsInteractor.downloadImage(url)
+            if (downloadCatsFlow.value) progressBarFlow.value = false
         }
     }
 }

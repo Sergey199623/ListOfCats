@@ -17,7 +17,6 @@
         <activity
             android:name=".presentation.cats.CatsActivity"
             android:exported="true"
-            android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +28,6 @@
         <activity
             android:name=".presentation.favoriteCats.FavoriteCatsActivity"
             android:exported="true"
-            android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize" />
 
     </application>

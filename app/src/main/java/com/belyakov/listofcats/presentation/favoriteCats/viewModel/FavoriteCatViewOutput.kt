@@ -7,6 +7,7 @@ interface FavoriteCatViewOutput {
 
     val favoriteCatsFlow: Flow<List<Cat>>
     val downloadCatsFlow: Flow<Boolean>
+    val progressBarFlow: Flow<Boolean>
 
     fun onRemoveFromFavoriteCats(cat: Cat)
 

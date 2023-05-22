@@ -6,6 +6,7 @@ import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.data.database.CatDatabase
 import com.belyakov.listofcats.data.network.CatApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
@@ -23,7 +24,7 @@ class CatInteractorImpl(
     private val catsDao = catDatabase.catDao()
 
     private val catApi = Retrofit.Builder()
-        .baseUrl("https://api.thecatapi.com/v1/")
+        .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(CatApi::class.java)
@@ -38,22 +39,18 @@ class CatInteractorImpl(
     override fun getFavoriteCats(): Flow<List<Cat>> = catsDao.getFavoriteCats()
 
     override suspend fun changeFavoriteStatusCate(cat: Cat) {
-        if (cat.isFavorite) {
-            val newCat = cat.copy(isFavorite = true)
-            catsDao.update(newCat)
-        } else {
-            val newCat = cat.copy(isFavorite = false)
-            catsDao.update(newCat)
-        }
+        val newCat = cat.copy(isFavorite = cat.isFavorite)
+        catsDao.update(newCat)
     }
 
     override suspend fun removeCatFromFavorites(cat: Cat) {
         // Удаляем кота из списка избранных в базе данных
-        val newCat = cat.copy(isFavorite = false)
+        val newCat = cat.copy(isFavorite = !cat.isFavorite)
         catsDao.update(newCat)
     }
 
     override suspend fun downloadImage(url: String) = withContext(Dispatchers.IO) {
+        delay(5000)
         try {
             val imageUrl = URL(url)
             val connection = imageUrl.openConnection() as HttpURLConnection
@@ -81,5 +78,9 @@ class CatInteractorImpl(
         } catch (e: Exception) {
             false
         }
+    }
+
+    private companion object {
+        const val BASE_URL = "https://api.thecatapi.com/v1/"
     }
 }

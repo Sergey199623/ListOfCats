@@ -36,7 +36,8 @@ class FavoriteCatAdapter(
             val updatedList = cats.toMutableList()
             updatedList.removeAt(position)
             cats = updatedList
-            notifyDataSetChanged()
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, itemCount - position)
         }
         holder.downloadButton.setOnClickListener {
             onDownloadClick(cat)

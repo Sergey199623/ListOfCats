@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/catsRecyclerView"
@@ -29,12 +30,18 @@
             android:id="@+id/favoriteCatsFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:fab_addButtonColorNormal="@color/white"
+            app:fab_addButtonColorPressed="@color/white"
             app:fab_colorNormal="@color/transparent"
-            app:fab_colorPressed="@color/gray"
+            app:fab_colorPressed="@color/white"
             app:fab_icon="@drawable/ic_favorite"
             app:fab_size="normal"
-            app:fab_title="Избранное" />
+            app:fab_title="Избранное"
+            app:rippleColor="@color/white" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    <include
+        layout="@layout/part_result" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

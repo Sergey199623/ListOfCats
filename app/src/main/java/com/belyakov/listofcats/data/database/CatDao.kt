@@ -17,7 +17,7 @@ interface CatDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(cats: List<Cat>)
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun update(cat: Cat)
 
     @Delete

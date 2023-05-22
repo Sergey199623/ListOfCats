@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.domain.CatInteractor
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -16,12 +17,16 @@ internal class CatViewModel(
 
     override val catsFlow = MutableSharedFlow<List<Cat>>()
     override val favoriteCatsFlow = MutableStateFlow<List<Cat>>(emptyList())
+    override val progressBarFlow = MutableStateFlow(false)
 
     override fun onViewCreated(page: Int) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable -> Timber.e(throwable) }
+        progressBarFlow.value = true
         viewModelScope.launch(exceptionHandler) {
             val newCats = catsInteractor.getCatList(page, 10)
             catsFlow.emit(newCats)
+            delay(2000)
+            progressBarFlow.value = false
         }
     }
 

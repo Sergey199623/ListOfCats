@@ -2,21 +2,39 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="16dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/catImageView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:padding="16dp"
-        android:id="@+id/favoriteButton"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_not_favorite" />
+        android:background="@color/gray"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="16dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/catImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/favoriteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@android:color/transparent"
+            android:padding="16dp"
+            android:src="@drawable/ic_not_favorite" />
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

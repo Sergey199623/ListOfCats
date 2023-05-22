@@ -5,12 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.belyakov.listofcats.databinding.ActivityCatsBinding
 import com.belyakov.listofcats.presentation.adapters.CatAdapter
 import com.belyakov.listofcats.presentation.cats.viewModel.CatViewModel
 import com.belyakov.listofcats.presentation.cats.viewModel.CatViewOutput
 import com.belyakov.listofcats.presentation.favoriteCats.FavoriteCatsActivity
+import kotlinx.android.synthetic.main.part_result.view.baseLayoutProgressBar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CatsActivity : AppCompatActivity() {
@@ -50,10 +52,17 @@ class CatsActivity : AppCompatActivity() {
                 adapter.setItems(resultCats.toMutableList())
             }
         }
+
+        lifecycleScope.launchWhenStarted {
+            viewOutput.progressBarFlow.collect { isVisible ->
+                binding.root.baseLayoutProgressBar.isVisible = isVisible
+            }
+        }
     }
 
     private fun showFavoriteScreen() {
         val intent = Intent(this, FavoriteCatsActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }
