@@ -5,29 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.belyakov.listofcats.R
+import com.belyakov.listofcats.base.BaseFragment
+import com.belyakov.listofcats.base.BaseScreen
 import com.belyakov.listofcats.databinding.FragmentCatsListBinding
 import com.belyakov.listofcats.ext.viewBinding
+import com.belyakov.listofcats.factory.screenViewModel
 import com.belyakov.listofcats.presentation.adapters.CatAdapter
 import com.belyakov.listofcats.presentation.cats.viewModel.CatViewModel
 import com.belyakov.listofcats.presentation.cats.viewModel.CatViewOutput
 import kotlinx.android.synthetic.main.part_result.view.baseLayoutProgressBar
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
-class CatsListFragment : Fragment() {
+class CatsListFragment : BaseFragment() {
+
+    class Screen : BaseScreen
 
     private val binding by viewBinding { FragmentCatsListBinding.bind(it) }
 //    private val fragmentContext: MtsJrPaywallFragmentContext by args(EXTRA_FRAGMENT_CONTEXT)
 
     private lateinit var adapter: CatAdapter
 
-    private val viewOutput: CatViewOutput by viewModel<CatViewModel> { parametersOf(fragmentContext) }
+    private val viewOutput: CatViewOutput by screenViewModel<CatViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +52,7 @@ class CatsListFragment : Fragment() {
                 ).show()
             }
 
-            favoriteCatsFab.setOnClickListener { showFavoriteScreen() }
+            favoriteCatsFab.setOnClickListener { viewOutput.onFavoriteListClicked() }
             catsRecyclerView.adapter = adapter
 
             lifecycleScope.launchWhenStarted {
@@ -66,23 +66,6 @@ class CatsListFragment : Fragment() {
                     root.baseLayoutProgressBar.isVisible = isVisible
                 }
             }
-        }
-    }
-
-    companion object {
-        private const val EXTRA_FRAGMENT_CONTEXT = "EXTRA_MTS_JR_PAYWALL_FRAGMENT_CONTEXT"
-
-        fun show(activity: FragmentActivity, fragmentContext: MtsJrPaywallFragmentContext) {
-            val fragmentManager = activity.supportFragmentManager
-
-            val fragment = MtsJrPaywallFragment().apply {
-                arguments = bundleOf(EXTRA_FRAGMENT_CONTEXT to fragmentContext)
-            }
-
-            fragmentManager.beginTransaction()
-                .add(android.R.id.content, fragment)
-                .addToBackStack(MtsJrPaywallFragment.toString())
-                .commitAllowingStateLoss()
         }
     }
 }

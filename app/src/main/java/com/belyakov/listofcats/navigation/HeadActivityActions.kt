@@ -2,11 +2,11 @@ package com.belyakov.listofcats.navigation
 
 import com.belyakov.listofcats.HeadActivity
 
-typealias HeadActivityActions = (HeadActivity) -> Unit
+typealias HeadActivityAction = (HeadActivity) -> Unit
 
 class HeadActivityActions {
 
-    var mainActivity: HeadActivity? = null
+    var headActivity: HeadActivity? = null
         set(activity) {
             field = activity
             if (activity != null) {
@@ -15,10 +15,10 @@ class HeadActivityActions {
             }
         }
 
-    private val actions = mutableListOf<HeadActivityActions>()
+    private val actions = mutableListOf<HeadActivityAction>()
 
-    operator fun invoke(action: HeadActivityActions) {
-        val activity = this.mainActivity
+    operator fun invoke(action: HeadActivityAction) {
+        val activity = this.headActivity
         if (activity == null) {
             actions += action
         } else {

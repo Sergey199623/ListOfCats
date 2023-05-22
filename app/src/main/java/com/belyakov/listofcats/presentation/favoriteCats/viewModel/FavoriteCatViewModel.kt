@@ -1,19 +1,18 @@
 package com.belyakov.listofcats.presentation.favoriteCats.viewModel
 
-import android.content.Context
-import android.content.Intent
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.domain.CatInteractor
 import com.belyakov.listofcats.domain.DownloadProgressCallback
+import com.belyakov.listofcats.navigation.Navigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 internal class FavoriteCatViewModel(
-    private val catsInteractor: CatInteractor
+    private val catsInteractor: CatInteractor,
+    private val navigator: Navigator
 ) : ViewModel(), FavoriteCatViewOutput, DownloadProgressCallback {
 
     override val favoriteCatsFlow: Flow<List<Cat>>

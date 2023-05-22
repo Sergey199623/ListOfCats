@@ -7,63 +7,61 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import com.belyakov.listofcats.databinding.ActivityHeadBinding
-import com.belyakov.listofcats.navigation.Navigator
-import java.util.UUID
+import com.belyakov.listofcats.base.BaseFragment
+import com.belyakov.listofcats.navigation.MainNavigator
+import com.belyakov.listofcats.presentation.cats.CatsListFragment
 
-class HeadActivity : AppCompatActivity(), Navigator {
+class HeadActivity : AppCompatActivity() {
 
     private val navigator by viewModels<MainNavigator> { ViewModelProvider.AndroidViewModelFactory(application) }
 
-    private lateinit var binding: ActivityHeadBinding
-
-    private val fragmentListener: FragmentManager.FragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
-        override fun onFragmentViewCreated(fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?) {
-            super.onFragmentViewCreated(fm, f, v, savedInstanceState)
-            update()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, false)
         super.onCreate(savedInstanceState)
-        binding = ActivityHeadBinding.inflate(layoutInflater).also { setContentView(it.root) }
-
+        setContentView(R.layout.activity_head)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentContainer, createFragment())
-                .commit()
+            // addToBackStacks - первоначальный экран не добавляем в стек, чтобы спокойно закрывать приложение, а не видеть белый экран
+            navigator.launchFragment(this, CatsListFragment.Screen(), addToBackStacks = false)
         }
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentCallbacks, false)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentListener)
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentCallbacks)
     }
 
-    override fun launchNext() {
-        supportFragmentManager.beginTransaction()
-            .addToBackStack(null)
-            .add(R.id.fragmentContainer, createFragment())
-            .commit()
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
-    override fun update() {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-        if (currentFragment is HasUuid) {
-            binding.currentFragmentUuidTextView.text = currentFragment.getUuid()
-        } else {
-            binding.currentFragmentUuidTextView.text = ""
+    override fun onResume() {
+        super.onResume()
+        navigator.whenActivityActive.headActivity = this
+    }
+
+    override fun onPause() {
+        super.onPause()
+        navigator.whenActivityActive.headActivity = null
+    }
+
+    private val fragmentCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentViewCreated(
+            fm: FragmentManager,
+            f: Fragment,
+            v: View,
+            savedInstanceState: Bundle?
+        ) {
+            if (supportFragmentManager.backStackEntryCount > 0) {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            } else {
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            }
+            val result = navigator.result.value?.getValue() ?: return
+            if (f is BaseFragment) {
+                f.viewModel.onResult(result)
+            }
+            super.onFragmentViewCreated(fm, f, v, savedInstanceState)
         }
-        if (currentFragment is NumberListener) {
-            currentFragment.onNewScreenNumber(1 + supportFragmentManager.backStackEntryCount)
-        }
     }
-
-    override fun generateUuid(): String = UUID.randomUUID().toString()
-
-    private fun createFragment(): RandomFragment {
-        return RandomFragment.newInstance(generateUuid())
-    }
-
 }

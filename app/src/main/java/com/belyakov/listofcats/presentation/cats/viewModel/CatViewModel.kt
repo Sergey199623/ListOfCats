@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.domain.CatInteractor
+import com.belyakov.listofcats.navigation.Navigator
+import com.belyakov.listofcats.presentation.favoriteCats.FavoriteCatListFragment
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,7 +14,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class CatViewModel(
-    private val catsInteractor: CatInteractor
+    private val catsInteractor: CatInteractor,
+    private val navigator: Navigator
 ) : ViewModel(), CatViewOutput {
 
     override val catsFlow = MutableSharedFlow<List<Cat>>()
@@ -34,5 +37,9 @@ internal class CatViewModel(
         viewModelScope.launch {
             catsInteractor.changeFavoriteStatusCate(cat)
         }
+    }
+
+    override fun onFavoriteListClicked() {
+        navigator.launch(FavoriteCatListFragment.FavoriteScreen())
     }
 }
