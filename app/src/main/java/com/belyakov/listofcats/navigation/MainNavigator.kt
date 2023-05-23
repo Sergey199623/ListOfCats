@@ -10,8 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.belyakov.listofcats.HeadActivity
 import com.belyakov.listofcats.R
-import com.belyakov.listofcats.base.BaseScreen
-import com.belyakov.listofcats.presentation.favoriteCats.Event
+import com.belyakov.listofcats.base.Event
 
 const val ARG_SCREEN = "screen"
 

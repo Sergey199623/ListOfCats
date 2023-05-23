@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">Список котов</string>
     <string name="images_loading">Идёт загрузка …</string>
+    <string name="cats_has_been_checked_favorite">Котик добавлен в избранное</string>
+    <string name="cats_has_been_unchecked_favorite">Котик удалён из избранного</string>
+    <string name="cats_has_been_downloaded">Изображение котика успешно загружено</string>
 </resources>

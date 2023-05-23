@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">List of Cats</string>
     <string name="images_loading">Loading …</string>
+    <string name="cats_has_been_checked_favorite">Kitty has been checked favorite</string>
+    <string name="cats_has_been_unchecked_favorite">Kitty has been unchecked favorite</string>
+    <string name="cats_has_been_downloaded">Kitty has been successfully downloaded</string>
 </resources>

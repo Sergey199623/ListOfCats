@@ -1,4 +1,4 @@
-package com.belyakov.listofcats.presentation.favoriteCats
+package com.belyakov.listofcats.base
 
 class Event<T>(
     private val value: T

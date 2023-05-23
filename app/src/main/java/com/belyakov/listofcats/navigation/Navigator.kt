@@ -1,7 +1,6 @@
 package com.belyakov.listofcats.navigation
 
 import androidx.annotation.StringRes
-import com.belyakov.listofcats.base.BaseScreen
 
 interface Navigator {
 

@@ -10,8 +10,8 @@ import org.koin.dsl.module
 object CatsModule {
 
     fun create() = module {
-        viewModel { CatViewModel(get(), get()) }
-        viewModel { FavoriteCatViewModel(get(), get()) }
+        viewModel { CatViewModel(get()) }
+        viewModel { FavoriteCatViewModel(get()) }
         single<CatInteractor> { CatInteractorImpl(get()) }
     }
 }

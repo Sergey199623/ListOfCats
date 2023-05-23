@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.belyakov.listofcats.base.BaseFragment
 import com.belyakov.listofcats.navigation.MainNavigator
 import com.belyakov.listofcats.presentation.cats.CatsListFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HeadActivity : AppCompatActivity() {
 

@@ -1,42 +1,43 @@
 package com.belyakov.listofcats.presentation.favoriteCats.viewModel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.belyakov.listofcats.R
+import com.belyakov.listofcats.base.BaseViewModel
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.domain.CatInteractor
-import com.belyakov.listofcats.domain.DownloadProgressCallback
 import com.belyakov.listofcats.navigation.Navigator
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent
 
-internal class FavoriteCatViewModel(
-    private val catsInteractor: CatInteractor,
-    private val navigator: Navigator
-) : ViewModel(), FavoriteCatViewOutput, DownloadProgressCallback {
+class FavoriteCatViewModel(
+    private val navigator: Navigator,
+) : BaseViewModel(){
 
-    override val favoriteCatsFlow: Flow<List<Cat>>
-        get() = catsInteractor.getFavoriteCats()
+    private val catsInteractor : CatInteractor by KoinJavaComponent.inject(CatInteractor::class.java)
 
-    override val downloadCatsFlow = MutableStateFlow(false)
-    override val downloadProgressFlow = MutableStateFlow<Int>(0)
-    override val progressBarFlow = MutableStateFlow(false)
+    private val _downloadCatsFlow = MutableStateFlow(false)
+    private val _progressBarFlow = MutableStateFlow(false)
+    private val _favoriteCatsFlow = catsInteractor.getFavoriteCats()
 
-    override fun onRemoveFromFavoriteCats(cat: Cat) {
+    val downloadCatsFlow = _downloadCatsFlow
+    val progressBarFlow = _progressBarFlow
+    val favoriteCatsFlow = _favoriteCatsFlow
+
+    fun onRemoveFromFavoriteCats(cat: Cat) {
         viewModelScope.launch {
             catsInteractor.removeCatFromFavorites(cat)
         }
     }
 
-    override fun onDownloadFavoriteCat(url: String) {
+    fun onDownloadFavoriteCat(url: String) {
         viewModelScope.launch {
             progressBarFlow.value = true
             downloadCatsFlow.value = catsInteractor.downloadImage(url)
-            if (downloadCatsFlow.value) progressBarFlow.value = false
+            if (downloadCatsFlow.value) {
+                progressBarFlow.value = false
+                navigator.toast(R.string.cats_has_been_downloaded)
+            }
         }
-    }
-
-    override fun onProgressUpdated(progress: Int) {
-        downloadProgressFlow.value = progress
     }
 }
