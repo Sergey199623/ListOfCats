@@ -64,9 +64,6 @@ class CatInteractorImpl(
             val file = File(directory, filename)
             val output = FileOutputStream(file)
 
-            val fileLength = connection.contentLength
-            var totalBytesRead = 0
-
             val buffer = ByteArray(1024)
             var bytesRead = input.read(buffer)
             while (bytesRead != -1) {

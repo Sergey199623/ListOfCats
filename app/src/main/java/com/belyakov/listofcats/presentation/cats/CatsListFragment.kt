@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.belyakov.listofcats.R
 import com.belyakov.listofcats.base.BaseFragment
+import com.belyakov.listofcats.base.BaseScreen
 import com.belyakov.listofcats.databinding.FragmentCatsListBinding
 import com.belyakov.listofcats.ext.viewBinding
 import com.belyakov.listofcats.factory.screenViewModel
@@ -16,6 +17,8 @@ import com.belyakov.listofcats.presentation.cats.viewModel.CatViewModel
 import kotlinx.android.synthetic.main.part_result.view.baseLayoutProgressBar
 
 class CatsListFragment : BaseFragment() {
+
+    class CatsListFragment : BaseScreen
 
     private val binding by viewBinding { FragmentCatsListBinding.bind(it) }
 

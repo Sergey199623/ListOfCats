@@ -21,7 +21,7 @@ class HeadActivity : AppCompatActivity() {
         setContentView(R.layout.activity_head)
         if (savedInstanceState == null) {
             // addToBackStacks - первоначальный экран не добавляем в стек, чтобы спокойно закрывать приложение, а не видеть белый экран
-            navigator.launchFragment(this, CatsListFragment.Screen(), addToBackStacks = false)
+            navigator.launchFragment(this, CatsListFragment.CatsListFragment(), addToBackStacks = false)
         }
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentCallbacks, false)
     }

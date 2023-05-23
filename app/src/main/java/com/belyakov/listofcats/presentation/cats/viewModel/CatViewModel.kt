@@ -28,7 +28,6 @@ class CatViewModel(
     val catsFlow = _catsFlow
     val progressBarFlow = _progressBarFlow
 
-
      fun onViewCreated(page: Int) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable -> Timber.e(throwable) }
         progressBarFlow.value = true
