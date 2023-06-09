@@ -6,7 +6,6 @@ import com.belyakov.listofcats.base.BaseViewModel
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.domain.CatInteractor
 import com.belyakov.listofcats.navigation.Navigator
-import com.belyakov.listofcats.presentation.cats.CatsListFragment
 import com.belyakov.listofcats.presentation.favoriteCats.FavoriteCatListFragment
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.delay
@@ -18,9 +17,8 @@ import timber.log.Timber
 
 class CatViewModel(
     private val navigator: Navigator,
+    private val catsInteractor: CatInteractor
 ) : BaseViewModel() {
-
-    private val catsInteractor : CatInteractor by inject(CatInteractor::class.java)
 
     private val _catsFlow = MutableSharedFlow<List<Cat>>()
     private val _progressBarFlow = MutableStateFlow(false)

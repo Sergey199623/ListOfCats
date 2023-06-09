@@ -1,10 +1,11 @@
-package com.belyakov.listofcats.domain
+package com.belyakov.listofcats.data
 
 import android.app.Application
 import android.os.Environment
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.data.database.CatDatabase
 import com.belyakov.listofcats.data.network.CatApi
+import com.belyakov.listofcats.domain.CatInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +17,7 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class CatInteractorImpl(
+internal class CatInteractorImpl(
     applicationContext: Application
 ) : CatInteractor {
 

@@ -10,11 +10,13 @@ import com.belyakov.listofcats.R
 import com.belyakov.listofcats.base.BaseFragment
 import com.belyakov.listofcats.base.BaseScreen
 import com.belyakov.listofcats.databinding.FragmentFavoriteCatsListBinding
+import com.belyakov.listofcats.domain.CatInteractor
 import com.belyakov.listofcats.ext.viewBinding
 import com.belyakov.listofcats.factory.screenViewModel
 import com.belyakov.listofcats.presentation.adapters.FavoriteCatAdapter
 import com.belyakov.listofcats.presentation.favoriteCats.viewModel.FavoriteCatViewModel
 import kotlinx.android.synthetic.main.part_result.view.baseLayoutProgressBar
+import org.koin.java.KoinJavaComponent
 
 class FavoriteCatListFragment : BaseFragment() {
 
@@ -24,7 +26,9 @@ class FavoriteCatListFragment : BaseFragment() {
 
     private lateinit var adapter: FavoriteCatAdapter
 
-    override val viewModel by screenViewModel<FavoriteCatViewModel>()
+    private val catsInteractor : CatInteractor by KoinJavaComponent.inject(CatInteractor::class.java)
+
+    override val viewModel by screenViewModel<FavoriteCatViewModel>(catsInteractor)
 
     override fun onCreateView(
         inflater: LayoutInflater,

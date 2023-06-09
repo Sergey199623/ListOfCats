@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.belyakov.listofcats.base.BaseFragment
 import com.belyakov.listofcats.navigation.MainNavigator
 import com.belyakov.listofcats.presentation.cats.CatsListFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HeadActivity : AppCompatActivity() {
 
@@ -21,7 +20,7 @@ class HeadActivity : AppCompatActivity() {
         setContentView(R.layout.activity_head)
         if (savedInstanceState == null) {
             // addToBackStacks - первоначальный экран не добавляем в стек, чтобы спокойно закрывать приложение, а не видеть белый экран
-            navigator.launchFragment(this, CatsListFragment.CatsListFragment(), addToBackStacks = false)
+            navigator.launchFragment(this, CatsListFragment.FirstScreen(), addToBackStacks = false)
         }
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentCallbacks, false)
     }

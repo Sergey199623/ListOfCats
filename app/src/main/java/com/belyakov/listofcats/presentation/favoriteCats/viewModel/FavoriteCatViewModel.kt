@@ -12,9 +12,8 @@ import org.koin.java.KoinJavaComponent
 
 class FavoriteCatViewModel(
     private val navigator: Navigator,
+    private val catsInteractor: CatInteractor
 ) : BaseViewModel(){
-
-    private val catsInteractor : CatInteractor by KoinJavaComponent.inject(CatInteractor::class.java)
 
     private val _downloadCatsFlow = MutableStateFlow(false)
     private val _progressBarFlow = MutableStateFlow(false)
