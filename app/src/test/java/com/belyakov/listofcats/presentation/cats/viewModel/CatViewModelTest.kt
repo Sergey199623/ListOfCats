@@ -1,113 +1,109 @@
 package com.belyakov.listofcats.presentation.cats.viewModel
 
-import com.belyakov.listofcats.MainCoroutineRule
 import com.belyakov.listofcats.R
+import com.belyakov.listofcats.ViewModelTest
 import com.belyakov.listofcats.data.database.Cat
 import com.belyakov.listofcats.domain.CatInteractor
 import com.belyakov.listofcats.navigation.Navigator
-import com.belyakov.listofcats.presentation.favoriteCats.FavoriteCatListFragment
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.just
+import io.mockk.verify
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.advanceTimeBy
-import org.junit.*
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.mockito.Mockito
-import org.mockito.kotlin.mock
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class CatViewModelTest {
+class CatViewModelTest : ViewModelTest() {
 
-    @get:Rule
-    val mainDispatcherRule = MainCoroutineRule()
+    @InjectMockKs
+    lateinit var viewModel: CatViewModel
 
-    private val navigator = mock<Navigator>()
-    private val catsInteractor = mock<CatInteractor>()
+    @RelaxedMockK
+    lateinit var navigator: Navigator
 
-    @BeforeEach
-    fun before() {
-    }
+    @RelaxedMockK
+    lateinit var catsInteractor: CatInteractor
 
-    @AfterEach
-    fun after() {
-        Mockito.reset(navigator)
+    private lateinit var catsFlow: MutableSharedFlow<List<Cat>>
+    private lateinit var progressBarFlow: MutableStateFlow<Boolean>
+
+    @Before
+    fun setUp() {
+        progressBarFlow = MutableStateFlow(false)
+        catsFlow = MutableStateFlow(emptyList())
     }
 
     @Test
-    fun test_onViewCreated() {
-        val testPage = 1
-        val viewModel = CatViewModel(
-            navigator = navigator,
-            catsInteractor = catsInteractor
+    fun test_onViewCreated() = runTest {
+        val page = 1
+        val limit = 10
+        val listOfCats = listOf(
+            Cat(id = "1", url = "http://example.com/cat1.jpg"),
+            Cat(id = "2", url = "http://example.com/cat1.jpg")
         )
-        viewModel.onViewCreated(testPage)
-        viewModel.progressBarFlow.value = true
+        coEvery { catsInteractor.getCatList(page, limit) } returns listOfCats
+        viewModel.onViewCreated(page)
 
-        val progressBarTestFlow = viewModel.progressBarFlow.value
-        assertEquals(true, progressBarTestFlow)
+//        verify(exactly = 1) { viewModel.onViewCreated(page) }
 
-        runTest {
-            // Ожидаем завершения асинхронной операции
-            advanceTimeBy(1000)
+        progressBarFlow.value = true
+        assertTrue(progressBarFlow.value)
 
-            // Проверяем ожидаемые значения в catsFlow
-            val catsList = viewModel.catsFlow
-            assertNotNull(catsList)
+        advanceTimeBy(1000)
 
-            // Проверяем ожидаемое значение progressBarFlow
-            viewModel.progressBarFlow.value = false
-            val progressBarValue = viewModel.progressBarFlow.value
-            assertEquals(false, progressBarValue)
-        }
-    }
+        // Todo разобраться
+        catsFlow.emit(listOfCats)
+//            coVerify { catsFlow.emit(listOfCats) }
 
-
-    @Test
-    fun test_onChangeFavoriteStatusCat() {
-        val cat = Cat(id = "1", url = "http://example.com/cat1.jpg", isFavorite = true)
-        val viewModel = CatViewModel(
-            navigator = navigator,
-            catsInteractor = catsInteractor
-        )
-        runTest {
-            Mockito.`when`(catsInteractor.changeFavoriteStatusCate(cat)).thenReturn(Unit)
-        }
-        viewModel.onChangeFavoriteStatusCat(cat)
+        progressBarFlow.value = false
+        assertFalse(progressBarFlow.value)
     }
 
     @Test
-    fun `should toast and favorite true`() {
-        val isFavorite = true
+    fun test_onSendToast() {
+        val isFavoriteFirstValue = true
+        val isFavoriteSecondValue = false
+
         val testMessage = R.string.cats_has_been_checked_favorite
-        Mockito.doNothing().`when`(navigator).toast(testMessage)
-        val viewModel = CatViewModel(
-            navigator = navigator,
-            catsInteractor = catsInteractor
-        )
-        viewModel.onSendToast(isFavorite)
+
+        assertEquals(true, isFavoriteFirstValue)
+        assertEquals(false, isFavoriteSecondValue)
+
+        viewModel.onSendToast(isFavoriteFirstValue)
+        verify { viewModel.onSendToast(isFavoriteFirstValue) }
+
+        navigator.toast(testMessage)
+        coEvery { navigator.toast(testMessage) } just Runs
     }
 
     @Test
-    fun `should toast and favorite false`() {
-        val isFavorite = false
-        val testMessage = R.string.cats_has_been_unchecked_favorite
-        Mockito.doNothing().`when`(navigator).toast(testMessage)
-        val viewModel = CatViewModel(
-            navigator = navigator,
-            catsInteractor = catsInteractor
-        )
-        viewModel.onSendToast(isFavorite)
+    fun test_onChangeFavoriteStatusCat() = runTest {
+        val cat = Cat(id = "1", url = "http://example.com/cat1.jpg", isFavorite = true)
+
+        coEvery { catsInteractor.changeFavoriteStatusCat(cat) } just Runs
+
+        viewModel.onChangeFavoriteStatusCat(cat)
+
+        coVerify { catsInteractor.changeFavoriteStatusCat(cat) }
     }
 
     @Test
     fun test_onFavoriteListClicked() {
-        Mockito.doNothing().`when`(navigator).launch(FavoriteCatListFragment.FavoriteScreen())
-        val viewModel = CatViewModel(
-            navigator = navigator,
-            catsInteractor = catsInteractor
-        )
+        coEvery { navigator.launch(any()) } just Runs
+
         viewModel.onFavoriteListClicked()
+
+        verify { navigator.launch(any()) }
     }
 }

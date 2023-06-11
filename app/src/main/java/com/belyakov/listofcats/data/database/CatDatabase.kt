@@ -21,7 +21,7 @@ abstract class CatDatabase : RoomDatabase() {
             }
             synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
+                    context,
                     CatDatabase::class.java,
                     "cat_database"
                 ).build()

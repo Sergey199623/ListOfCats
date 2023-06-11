@@ -12,7 +12,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
 class CatViewModel(
@@ -20,7 +19,7 @@ class CatViewModel(
     private val catsInteractor: CatInteractor
 ) : BaseViewModel() {
 
-    private val _catsFlow = MutableSharedFlow<List<Cat>>()
+    private val _catsFlow = MutableStateFlow<List<Cat>>(emptyList())
     private val _progressBarFlow = MutableStateFlow(false)
 
     val catsFlow = _catsFlow
@@ -39,7 +38,7 @@ class CatViewModel(
 
     fun onChangeFavoriteStatusCat(cat: Cat) {
         viewModelScope.launch {
-            catsInteractor.changeFavoriteStatusCate(cat)
+            catsInteractor.changeFavoriteStatusCat(cat)
         }
     }
 
